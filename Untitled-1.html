@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Website</title>
+</head>
+<body>
+    <h1>Search Website</h1>
+    <input type="text" id="searchInput" placeholder="Enter your search query...">
+    <button onclick="search()">Search</button>
+    <div id="searchResults"></div>
+
+    <script>
+        function search() {
+            const query = document.getElementById("searchInput").value;
+            fetch(`/search?query=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => displayResults(data))
+                .catch(error => console.error('Error:', error));
+        }
+
+        function displayResults(results) {
+            const searchResultsDiv = document.getElementById("searchResults");
+            searchResultsDiv.innerHTML = ""; // Clear previous results
+
+            for (const result of results) {
+                const resultElement = document.createElement("p");
+                resultElement.textContent = result.title;
+                searchResultsDiv.appendChild(resultElement);
+            }
+        }
+    </script>
+</body>
+</html>

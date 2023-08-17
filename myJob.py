@@ -30,8 +30,8 @@ email_elem.send_keys(email)
 password_elem = driver.find_element(By.ID, "password")
 password_elem.send_keys(password)
 
-button = WebDriverWait(driver, 100).until(
-    EC.presence_of_element_located((By.XPATH, "//*[@id=\"organic-div\"]/form/div[3]/button")))
+button = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@id=\"organic-div\"]/for"
+                                                                                   "m/div[3]/button")))
 button.click()
 
 search = driver.find_element(By.XPATH, "/html/body")

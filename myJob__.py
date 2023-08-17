@@ -1,19 +1,19 @@
 import csv
 from linkedin_scraper import JobSearch, actions, Job
 from selenium import webdriver
-from time import sleep
 
 
-# proxy_ip = "141.11.182.4"
-# proxy_port = "3211"
+# proxy_ip = "138.197.203.84"
+# proxy_port = "7497"
 #
-# proxy = f"https://{proxy_ip}:{proxy_port}"
+# proxy = f"http://{proxy_ip}:{proxy_port}"
 #
 # chrome_options = webdriver.ChromeOptions()
 # chrome_options.add_argument(f'--proxy-server={proxy}')  # change IP address
 # chrome_options.add_experimental_option("detach", True)  # does not close webpage automatically
 #
 # driver = webdriver.Chrome(options=chrome_options)
+
 driver = webdriver.Chrome()
 
 # email = "kid76473@gmail.com"
