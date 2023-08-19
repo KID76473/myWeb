@@ -22,7 +22,36 @@ const routes = [
     path: '/myPage',
     name: 'myPage',
     component: () => import('../views/myPage.vue')
-  }
+  },
+  {
+    path: '/testForm',
+    name: 'testForm',
+    component: () => import('../views/testForm.vue')
+  },
+  // {
+  //   path: '/backendEng',
+  //   name: 'backendEng',
+  //   // route level code-splitting
+  //   // this generates a separate chunk (about.[hash].js) for this route
+  //   // which is lazy-loaded when the route is visited.
+  //   component: () => import(/* webpackChunkName: "about" */ '../views/backendEng.vue')
+  // },
+  // {
+  //   path: '/frontendEng',
+  //   name: 'frontendEng',
+  //   // route level code-splitting
+  //   // this generates a separate chunk (about.[hash].js) for this route
+  //   // which is lazy-loaded when the route is visited.
+  //   component: () => import(/* webpackChunkName: "about" */ '../views/frontendEng.vue')
+  // },
+  // {
+  //   path: '/searchBox',
+  //   name: 'searchBox',
+  //   // route level code-splitting
+  //   // this generates a separate chunk (about.[hash].js) for this route
+  //   // which is lazy-loaded when the route is visited.
+  //   component: () => import(/* webpackChunkName: "about" */ '../views/searchBox.vue')
+  // }
 ]
 
 const router = new VueRouter({

@@ -8,7 +8,7 @@ def crawl():
     print("Method crawl is called!!!")
     # Your code to run the Python script goes here
     # For example, you can call a specific Python file using subprocess
-    result = subprocess.run(['python', '../../test.py'], stdout=subprocess.PIPE)
+    result = subprocess.run(['python', '../../../test.py'], stdout=subprocess.PIPE)
     output = result.stdout.decode('utf-8')
 
     # Return the result to the frontend

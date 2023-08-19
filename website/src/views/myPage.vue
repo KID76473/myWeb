@@ -1,89 +1,202 @@
 <template>
     <div>
         <el-container>
-        <el-header class="custom-header">This is a webpage that updates information recruitment of of tech company every day.</el-header>
-        <el-main>Authorized by James Huang</el-main>
+            <el-header class="custom-header">This is a webpage that updates information recruitment of tech company every day.</el-header>
+            <el-main>Authorized by James Huang</el-main>
         </el-container>
-        <br>
-        <div>
-            <!-- <el-input placeholder="Please type the job you want to search" v-model="input" clearable></el-input> -->
-            <el-button @click="crawlData" size="large" type="primary" text-align="center">Refresh</el-button>
+        <div class="layout-container">
+            <div class="left">
+                <el-row class="tac">
+                    <el-col :span="24">
+                        <h1>Navigation Bar</h1>
+                        <el-menu
+                            default-active="2"
+                            class="el-menu-vertical-demo"
+                            @open="handleOpen"
+                            @close="handleClose">
+                        <el-menu-item index="1" @click="selectContent(1)">
+                            <i class="el-icon-menu"></i>
+                            <span slot="title">Backend Engineer</span>
+                        </el-menu-item>
+
+                        <el-menu-item index="2" @click="selectContent(2)">
+                            <i class="el-icon-menu"></i>
+                            <span slot="title">Frontend Engineer</span>
+                        </el-menu-item>
+
+                        <el-menu-item index="3" @click="selectContent(3)">
+                            <i class="el-icon-menu"></i>
+                            <span slot="title">Search by yourself...</span>
+                        </el-menu-item>
+                        </el-menu>
+                    </el-col>
+                </el-row>
+            </div>
+
+            <div class="right">
+                <div v-if="currentSelection === 1">
+                    <div>
+                        <!-- <el-input placeholder="Please type the job you want to search" v-model="input" clearable></el-input> -->
+                        <el-button @click="crawlData" size="large" type="primary" text-align="center">Refresh</el-button>
+                    </div>
+                    <el-table
+                    :data="tableData1"
+                    stripe
+                    style="width: 100%">
+                    <el-table-column
+                        prop="title"
+                        label="title"
+                        width="180">
+                    </el-table-column>
+                    <el-table-column
+                        prop="company"
+                        label="company"
+                        width="180">
+                    </el-table-column>
+                    <el-table-column
+                        prop="location"
+                        label="location">
+                    </el-table-column>
+                    <el-table-column
+                        prop="url"
+                        label="url">
+                    </el-table-column>
+                    </el-table>
+                </div>
+
+                <div v-if="currentSelection === 2">
+                    <div>
+                        <!-- <el-input placeholder="Please type the job you want to search" v-model="input" clearable></el-input> -->
+                        <el-button @click="crawlData" size="large" type="primary" text-align="center">Refresh</el-button>
+                    </div>
+                    <el-table
+                    :data="tableData2"
+                    stripe
+                    style="width: 100%">
+                    <el-table-column
+                        prop="title"
+                        label="title"
+                        width="180">
+                    </el-table-column>
+                    <el-table-column
+                        prop="company"
+                        label="company"
+                        width="180">
+                    </el-table-column>
+                    <el-table-column
+                        prop="location"
+                        label="location">
+                    </el-table-column>
+                    <el-table-column
+                        prop="url"
+                        label="url">
+                    </el-table-column>
+                    </el-table>
+                    <div>
+                        <!-- <el-input placeholder="Please type the job you want to search" v-model="input" clearable></el-input> -->
+                        <el-button @click="crawlData" size="large" type="primary" text-align="center">Refresh</el-button>
+                    </div>
+                </div>
+
+                <div v-if="currentSelection === 3">
+                    <el-container>
+                    <el-header class="custom-header">Search by yourself</el-header>
+                    </el-container>
+                    <el-input
+                        placeholder="Please input the job title you want to search"
+                        v-model="input"
+                        clearable>
+                    </el-input>
+                    <div>
+                        <!-- <el-input placeholder="Please type the job you want to search" v-model="input" clearable></el-input> -->
+                        <el-button @click="crawlData" size="large" type="primary" text-align="center">Search</el-button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <br>
-
-        <el-container>
-        <el-header class="custom-header">Machine Learning Engineer</el-header>
-        <el-main>
-            <el-table :data="tableData" style="width: 100%">
-            <el-table-column prop="title" label="title" width="180"></el-table-column>
-            <el-table-column prop="company" label="company" width="180"></el-table-column>
-        </el-table>
-        </el-main>
-        </el-container>
-        
-        <el-container>
-        <el-header class="custom-header">Backend Engineer</el-header>
-        <el-main>
-            <!-- <el-table :data="tableData" style="width: 100%">
-            <el-table-column prop="title" label="title" width="180"></el-table-column>
-            <el-table-column prop="company" label="company" width="180"></el-table-column>
-            </el-table> -->
-
-        </el-main>
-        </el-container>
-        
     </div>
   </template>
 
   
 <script>
-// window.alert("asdf");
 
-export default {
-    data() {
-        return {
-            tableData: [
-                {
-                title: '',
-                company: '',
-                },
-                {
-                title: '',
-                company: '',
-                },
-                {
-                title: '',
-                company: '',
-                },
-                {
-                title: '',
-                company: '',
-                },
-            ],
-            input: '', 
-        };
-    },
+    import frontendData from '../../../data/frontendengineer.json';
+    import backendData from '../../../data/BackendEngineer.json';
 
-    methods: {
-        crawlData() {
-            // window.alert("crawlData method triggered!");
-            console.log("crawlData method triggered on myPage.vue!");
-            // Make a POST request to the backend API endpoint
-            fetch('http://localhost:8080/crawl', { method: 'POST' })
-            // .then((response) => response.json())
-            // .then((data) => {
-            //     // Handle the crawled data here, e.g., update the Vue component's data
-            //     console.log(data);
-            // })
-            .catch((error) => {
-                console.error('Failed to crawl data:', error);
-            });
+    var ddata1 = []
+    var ddata2 = []
+
+    for (var key in frontendData) {
+        ddata1.push(frontendData[key]);
+    }
+    for (key in backendData) {
+        ddata2.push(backendData[key]);
+    }
+
+    export default {
+        data() {
+            return {
+                tableData1: ddata1,
+                tableData2: ddata2,
+                currentSelection: 1,
+                input: '',
+            };
         },
-    },
-};
+
+        methods: {
+            handleOpen(key, keyPath) {
+                console.log(key, keyPath);
+            },
+            handleClose(key, keyPath) {
+                console.log(key, keyPath);
+            },
+
+            selectContent(selection) {
+                console.log("selectionContent is called. Parameter is ", selection)
+                this.currentSelection = selection;
+            },
+
+            crawlData() {
+                // window.alert("crawlData method triggered!");
+                console.log("crawlData method triggered on myPage.vue!");
+                // Make a POST request to the backend API endpoint
+                fetch('http://localhost:8081/crawl', { method: 'POST' })
+                // .then((response) => response.json())
+                // .then((data) => {
+                //     // Handle the crawled data here, e.g., update the Vue component's data
+                //     console.log(data);
+                // })
+                .catch((error) => {
+                    console.error('Failed to crawl data:', error);
+                });
+            },
+        },
+    };
 </script>
 
 <style>
+    .layout-container {
+    display: flex; /* Use flex display to arrange items horizontally */
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
+
+    .left {
+      flex: 1;
+      background-color: lightgray;
+      padding: 20px;
+    }
+    
+    .right {
+      flex: 3;
+      background-color: lightblue;
+      padding: 20px;
+    }
+
     .custom-header {
         font-size: 40px; /* Set your desired font size */
     }
@@ -138,4 +251,3 @@ export default {
         margin-bottom: 40px;
     }
 </style>
-  

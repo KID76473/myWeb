@@ -1,4 +1,5 @@
-import csv
+import os
+import json
 from linkedin_scraper import JobSearch, actions, Job
 from selenium import webdriver
 
@@ -28,8 +29,8 @@ password = "Hjjhjjhjj007"
 # }
 # actions._login_with_cookie(driver, new_cookie)
 
-actions.login(driver, email, password, timeout=10)  # if email and password isn't given, it'll prompt in terminal
-input("Press Enter")
+actions.login(driver, email, password, timeout=5)  # if email and password isn't given, it'll prompt in terminal
+# input("Press Enter")
 job_search = JobSearch(driver=driver, close_on_complete=True, scrape=True)
 # job_search contains jobs from your logged in front page:
 # - job_search.recommended_jobs
@@ -38,12 +39,30 @@ job_search = JobSearch(driver=driver, close_on_complete=True, scrape=True)
 
 # Machine Learning Engineer
 # Backend Engineer
-job_listings = job_search.search("Machine Learning Engineer")  # returns the list of `Job` from the first
+# job_title = "Machine Learning Engineer"
+job_title = input("Please input the job you want to search: ")
+job_listings = job_search.search(job_title)  # returns the list of `Job` from the first
+temp = {}
+for j in job_listings:
+    temp[j.job_title] = {
+                         "title": j.job_title,
+                         "company": j.company,
+                         "location": j.location,
+                         "benefits": j.benefits,
+                         "description": j.job_description,
+                         "url": j.linkedin_url
+                        }
+
+# Convert list to JSON
+json_list = json.dumps(temp, indent=4)
+print(json_list)
 
 print("Start to write.")
-file = 'machineLearning.csv'
-with open(file, 'w', newline='', encoding='utf-8') as f:
-    writer = csv.writer(f)
-    for j in job_listings:
-        writer.writerow([j.job_title, j.company])
+desired_directory = "./data/"
+file_name = job_title.replace(" ", "") + ".json"
+file_path = desired_directory + file_name
+print("file_name is ", file_name)
+with open(file_path, 'w', newline="", encoding='utf-8') as file:
+    file.write(json_list)
+    # json.dump(json_list, file, indent=4)  # This way is not preferred because it squeezes all data into one line.
 print("Finished.")
