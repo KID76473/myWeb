@@ -11,20 +11,16 @@
                         <h1>Navigation Bar</h1>
                         <el-menu
                             default-active="2"
-                            class="el-menu-vertical-demo"
-                            @open="handleOpen"
-                            @close="handleClose">
-                        <el-menu-item index="1" @click="selectContent(1)">
-                            <i class="el-icon-menu"></i>
-                            <span slot="title">Backend Engineer</span>
-                        </el-menu-item>
-
-                        <el-menu-item index="2" @click="selectContent(2)">
+                            class="el-menu-vertical-demo">
+                        <el-menu-item @click="selectContent(1)">
                             <i class="el-icon-menu"></i>
                             <span slot="title">Frontend Engineer</span>
                         </el-menu-item>
-
-                        <el-menu-item index="3" @click="selectContent(3)">
+                        <el-menu-item @click="selectContent(2)">
+                            <i class="el-icon-menu"></i>
+                            <span slot="title">Backend Engineer</span>
+                        </el-menu-item>
+                        <el-menu-item @click="selectContent(3)">
                             <i class="el-icon-menu"></i>
                             <span slot="title">Search by yourself...</span>
                         </el-menu-item>
@@ -35,67 +31,35 @@
 
             <div class="right">
                 <div v-if="currentSelection === 1">
-                    <div>
-                        <!-- <el-input placeholder="Please type the job you want to search" v-model="input" clearable></el-input> -->
-                        <el-button @click="crawlData" size="large" type="primary" text-align="center">Refresh</el-button>
-                    </div>
-                    <el-table
-                    :data="tableData1"
-                    stripe
-                    style="width: 100%">
-                    <el-table-column
-                        prop="title"
-                        label="title"
-                        width="180">
-                    </el-table-column>
-                    <el-table-column
-                        prop="company"
-                        label="company"
-                        width="180">
-                    </el-table-column>
-                    <el-table-column
-                        prop="location"
-                        label="location">
-                    </el-table-column>
-                    <el-table-column
-                        prop="url"
-                        label="url">
+                    <el-button @click="crawlData" size="large" type="primary" text-align="center">Refresh</el-button>
+                    <h5>If you want to refresh data, click refresh button and refresh the webpage!</h5>
+                    <br>
+                    <el-table :data="tableData1" stripe style="width: 100%">
+                    <el-table-column prop="title" label="title" width="180"></el-table-column>
+                    <el-table-column prop="company" label="company" width="180"></el-table-column>
+                    <el-table-column prop="location" label="location"></el-table-column>
+                    <el-table-column prop="url" label="superlink">
+                        <template slot-scope="scope">
+                            <el-link :href="scope.row.url" target="_blank">{{ "Go to this job" }}</el-link>
+                        </template>
                     </el-table-column>
                     </el-table>
                 </div>
 
                 <div v-if="currentSelection === 2">
-                    <div>
-                        <!-- <el-input placeholder="Please type the job you want to search" v-model="input" clearable></el-input> -->
-                        <el-button @click="crawlData" size="large" type="primary" text-align="center">Refresh</el-button>
-                    </div>
-                    <el-table
-                    :data="tableData2"
-                    stripe
-                    style="width: 100%">
-                    <el-table-column
-                        prop="title"
-                        label="title"
-                        width="180">
-                    </el-table-column>
-                    <el-table-column
-                        prop="company"
-                        label="company"
-                        width="180">
-                    </el-table-column>
-                    <el-table-column
-                        prop="location"
-                        label="location">
-                    </el-table-column>
-                    <el-table-column
-                        prop="url"
-                        label="url">
+                    <el-button @click="crawlData" size="large" type="primary" text-align="center">Refresh</el-button>
+                    <h5>If you want to refresh data, click refresh button and refresh the webpage!</h5>
+                    <br>
+                    <el-table :data="tableData2" stripe style="width: 100%">
+                    <el-table-column prop="title" label="title" width="180"></el-table-column>
+                    <el-table-column prop="company" label="company" width="180"></el-table-column>
+                    <el-table-column prop="location" label="location"></el-table-column>
+                    <el-table-column prop="url" label="superlink">
+                        <template slot-scope="scope">
+                            <el-link :href="scope.row.url" target="_blank">{{ "Go to this job" }}</el-link>
+                        </template>
                     </el-table-column>
                     </el-table>
-                    <div>
-                        <!-- <el-input placeholder="Please type the job you want to search" v-model="input" clearable></el-input> -->
-                        <el-button @click="crawlData" size="large" type="primary" text-align="center">Refresh</el-button>
-                    </div>
                 </div>
 
                 <div v-if="currentSelection === 3">
@@ -108,7 +72,6 @@
                         clearable>
                     </el-input>
                     <div>
-                        <!-- <el-input placeholder="Please type the job you want to search" v-model="input" clearable></el-input> -->
                         <el-button @click="crawlData" size="large" type="primary" text-align="center">Search</el-button>
                     </div>
                 </div>
@@ -119,7 +82,6 @@
 
   
 <script>
-
     import frontendData from '../../../data/frontendengineer.json';
     import backendData from '../../../data/BackendEngineer.json';
 
@@ -144,20 +106,11 @@
         },
 
         methods: {
-            handleOpen(key, keyPath) {
-                console.log(key, keyPath);
-            },
-            handleClose(key, keyPath) {
-                console.log(key, keyPath);
-            },
-
             selectContent(selection) {
-                console.log("selectionContent is called. Parameter is ", selection)
                 this.currentSelection = selection;
             },
 
             crawlData() {
-                // window.alert("crawlData method triggered!");
                 console.log("crawlData method triggered on myPage.vue!");
                 // Make a POST request to the backend API endpoint
                 fetch('http://localhost:8081/crawl', { method: 'POST' })

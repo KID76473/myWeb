@@ -1,4 +1,3 @@
-import os
 import json
 from linkedin_scraper import JobSearch, actions, Job
 from selenium import webdriver
@@ -17,9 +16,9 @@ from selenium import webdriver
 
 driver = webdriver.Chrome()
 
-# email = "kid76473@gmail.com"
-email = "13161133872@163.com"
-password = "Hjjhjjhjj007"
+# email = "xxxxxxxxx@gmail.com"
+email = "xxxxxxxxxxxxxxx@163.com"
+password = "xxxxxxxxxxxx"
 
 # new_cookie = {
 #     "name": email,
@@ -58,9 +57,9 @@ json_list = json.dumps(temp, indent=4)
 print(json_list)
 
 print("Start to write.")
-desired_directory = "./data/"
-file_name = job_title.replace(" ", "") + ".json"
-file_path = desired_directory + file_name
+directory = "./data/"
+file_name = job_title.replace(" ", "") + ".json"  # eliminate space
+file_path = directory + file_name
 print("file_name is ", file_name)
 with open(file_path, 'w', newline="", encoding='utf-8') as file:
     file.write(json_list)
