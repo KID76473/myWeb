@@ -31,7 +31,7 @@
 
             <div class="right">
                 <div v-if="currentSelection === 1">
-                    <el-button @click="crawlData" size="large" type="primary" text-align="center">Refresh</el-button>
+                    <el-button @click="crawlData(defaultJob1)" size="large" type="primary" text-align="center">Refresh</el-button>
                     <h5>If you want to refresh data, click refresh button and refresh the webpage!</h5>
                     <br>
                     <el-table :data="tableData1" stripe style="width: 100%">
@@ -47,7 +47,7 @@
                 </div>
 
                 <div v-if="currentSelection === 2">
-                    <el-button @click="crawlData" size="large" type="primary" text-align="center">Refresh</el-button>
+                    <el-button @click="crawlData(defaultJob2)" size="large" type="primary" text-align="center">Refresh</el-button>
                     <h5>If you want to refresh data, click refresh button and refresh the webpage!</h5>
                     <br>
                     <el-table :data="tableData2" stripe style="width: 100%">
@@ -71,9 +71,21 @@
                         v-model="input"
                         clearable>
                     </el-input>
+                    <br>
                     <div>
-                        <el-button @click="crawlData" size="large" type="primary" text-align="center">Search</el-button>
+                        <el-button @click="crawlData(input)" size="large" type="primary" text-align="center">Search</el-button>
                     </div>
+                    <br>
+                    <el-table :data="tableData3" stripe style="width: 100%">
+                    <el-table-column prop="title" label="title" width="180"></el-table-column>
+                    <el-table-column prop="company" label="company" width="180"></el-table-column>
+                    <el-table-column prop="location" label="location"></el-table-column>
+                    <el-table-column prop="url" label="superlink">
+                        <template slot-scope="scope">
+                            <el-link :href="scope.row.url" target="_blank">{{ "Go to this job" }}</el-link>
+                        </template>
+                    </el-table-column>
+                    </el-table>
                 </div>
             </div>
         </div>
@@ -82,11 +94,13 @@
 
   
 <script>
-    import frontendData from '../../../data/frontendengineer.json';
-    import backendData from '../../../data/BackendEngineer.json';
+    import frontendData from '../../data/frontendengineer.json';
+    import backendData from '../../data/backendengineer.json';
+    import axios from 'axios';
 
     var ddata1 = []
     var ddata2 = []
+    var ddata3 = []
 
     for (var key in frontendData) {
         ddata1.push(frontendData[key]);
@@ -100,7 +114,10 @@
             return {
                 tableData1: ddata1,
                 tableData2: ddata2,
+                tableData3: ddata3,
                 currentSelection: 1,
+                defaultJob1: "frontend engineer",
+                defaultJob2: "backend engineer",
                 input: '',
             };
         },
@@ -110,19 +127,29 @@
                 this.currentSelection = selection;
             },
 
-            crawlData() {
+            crawlData(inputData) {
                 console.log("crawlData method triggered on myPage.vue!");
-                // Make a POST request to the backend API endpoint
-                fetch('http://localhost:8081/crawl', { method: 'POST' })
-                // .then((response) => response.json())
-                // .then((data) => {
-                //     // Handle the crawled data here, e.g., update the Vue component's data
-                //     console.log(data);
-                // })
+                // Make a GET request to the backend API endpoint using Axios
+                axios.get('http://localhost:8080/crawl', {
+                    params: {
+                        inputData: inputData
+                    }
+                })
+                .then(() => {
+                    console.log("GET request to /crawl was successful");
+                })
                 .catch((error) => {
-                    console.error('Failed to crawl data:', error);
+                    console.error('Failed to trigger crawling:', error);
                 });
+                this.showData()
             },
+
+            async showData() {
+                const updatedData = await import('../../data/temp.json');
+                for (key in updatedData) {
+                    ddata3.push(updatedData[key]);
+                }
+            }
         },
     };
 </script>

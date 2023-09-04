@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="background-color: #606266;">
         <el-button @click="changeData" size="large" type="primary" text-align="center">Refresh</el-button>
         <h5>If you want to refresh data, click refresh button and refresh the webpage!</h5>
         <el-table :data="tableData1" stripe style="width: 100%">
@@ -17,20 +17,14 @@
 </template>
 
 <script>
-    import frontendData from '../../../data/frontendengineer.json';
-    // import backendData from '../../../data/BackendEngineer.json';
+    import frontendData from '../../data/frontendengineer.json';
+    // import backendData from '../../data/backendengineer.json';
 
     var ddata1 = []
 
     for (var key in frontendData) {
-        var temp = frontendData[key];
-        // temp["url"] = <el-link type="primary">主要链接</el-link>
-        // console.log(temp["title"])
-        ddata1.push(temp);
+        ddata1.push(frontendData[key]);
     }
-    // for (key in backendData) {
-    //     ddata2.push(backendData[key]);
-    // }
 
     export default {
         data() {
@@ -41,8 +35,8 @@
         },
         
         methods: {
-            changeData() {
-                const updated = require('../../../data/frontendengineer.json');
+            update() {
+                const updated = require('../../data/frontendengineer.json');
                 this.tableData1 = [];  // Clear the existing data
                 for (var key in updated) {
                     this.tableData1.push(updated[key]);
